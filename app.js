@@ -1,7 +1,7 @@
 import Express from 'express';
+import bodyParser from 'body-parser';
 import config from './config/config';
 import datasource from './config/datasource';
-import bodyParser from 'body-parser';
 
 const app = Express();
 app.config = config;

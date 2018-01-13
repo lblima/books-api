@@ -1,5 +1,5 @@
-import App from './app';
+import app from './app';
 
-App.listen('7000', () => {
+app.listen('7000', () => {
     console.log('App is running on port 7000');
 });

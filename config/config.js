@@ -4,6 +4,7 @@ export default {
     password: '',
     params: {
         dialect: 'sqlite',
+        // storage: `${process.env.NODE_ENV}_books.sqlite`,
         storage: 'books.sqlite',
         define: {
             underscore: true

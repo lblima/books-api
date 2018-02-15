@@ -1,22 +1,43 @@
+import jwt from 'jwt-simple';
+
 describe('Routes Books', () => {
     const Books = app.datasource.models.Books;
+    const Users = app.datasource.models.Users;
+    const jwtSecret = app.config.jwtSecret;
+
     const defaultBook = {
-            id: 1,
-            name: 'Default Book',
-            description: 'Default description'
-        };
+        id: 1,
+        name: 'Default Book',
+        description: 'Deafault description'
+    };
+
+    let token;
 
     beforeEach(done => {
-        Books
+        Users
             .destroy({
                 where: {}
             })
-            .then(() => {
-                Books.create(defaultBook);
-            })
-            .then(() => {
-                done();
-            })
+            .then(() => Users.create({
+                name: 'Leonardo Lima',
+                email: 'leo@mail.com',
+                password: '123456'
+            }))
+            .then(user => {
+                Books
+                    .destroy({
+                        where: {}
+                    })
+                    .then(() => {
+                        Books.create(defaultBook);
+                    })
+                    .then(() => {
+                        token = jwt.encode({
+                            id: user.id
+                        }, jwtSecret);
+                        done();
+                    })
+            });
     });
 
     describe('Route GET /books', () => {
@@ -32,6 +53,7 @@ describe('Routes Books', () => {
 
             request
                 .get('/books') 
+                .set('Authorization', `bearer ${token}`)
                 .end((err, res) => {
 
                     joiAssert(res.body, bookList);
@@ -54,6 +76,7 @@ describe('Routes Books', () => {
 
             request
                 .get('/books/1')
+                .set('Authorization', `bearer ${token}`)
                 .end((err, res) => {
                     joiAssert(res.body, book);
                     done(err);
@@ -80,6 +103,7 @@ describe('Routes Books', () => {
 
             request
                 .post('/books')
+                .set('Authorization', `bearer ${token}`)
                 .send(newBook)
                 .end((err, res) => {
 
@@ -101,6 +125,7 @@ describe('Routes Books', () => {
 
             request
                 .put('/books/1')
+                .set('Authorization', `bearer ${token}`)
                 .send(updatedBook)
                 .end((err, res) => {
 
@@ -116,6 +141,7 @@ describe('Routes Books', () => {
 
             request
                 .delete('/books/1')
+                .set('Authorization', `bearer ${token}`)
                 .end((err, res) => {
 
                     expect(res.statusCode).to.be.eql(204);

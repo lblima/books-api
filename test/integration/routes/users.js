@@ -1,29 +1,37 @@
+import jwt from 'jwt-simple';
+
 describe('Routes Users', () => {
     const Users = app.datasource.models.Users;
     const defaultUser = {
-            id: 1,
-            name: 'Default User',
-            email: 'test@mail.com',
-            password: 'test'
-        };
+        id: 1,
+        name: 'Default User',
+        email: 'test@mail.com',
+        password: 'test'
+    };
+    let token;
+    const jwtSecret = app.config.jwtSecret;
 
     beforeEach(done => {
         Users
-            .destroy({
-                where: {}
-            })
-            .then(() => {
-                Users.create(defaultUser);
-            })
-            .then(() => {
-                done();
-            })
+            .destroy({ where: {} })
+            .then(() => Users.create({
+                name: 'Leonardo Lima',
+                email: 'leo@mail.com',
+                password: '123456'
+            }))
+            .then(user => {
+                Users.create(defaultUser)
+                    .then(() => {
+                        token = jwt.encode({ id: user.id }, jwtSecret);
+                        done();
+                    })});
     });
 
     describe('Route GET /Users', () => {
-        it('should return a list of Users', done => {            
+        it('should return a list of Users', done => {
             request
                 .get('/Users')
+                .set('Authorization', `bearer ${token}`)
                 .end((err, res) => {
 
                     expect(res.body[0].id).to.be.eql(defaultUser.id);
@@ -39,6 +47,7 @@ describe('Routes Users', () => {
         it('should return a user', done => {
             request
                 .get('/Users/1')
+                .set('Authorization', `bearer ${token}`)
                 .end((err, res) => {
 
                     expect(res.body.id).to.be.eql(defaultUser.id);
@@ -62,6 +71,7 @@ describe('Routes Users', () => {
 
             request
                 .post('/Users')
+                .set('Authorization', `bearer ${token}`)
                 .send(newUser)
                 .end((err, res) => {
 
@@ -85,6 +95,7 @@ describe('Routes Users', () => {
 
             request
                 .put('/Users/1')
+                .set('Authorization', `bearer ${token}`)
                 .send(updatedUser)
                 .end((err, res) => {
 
@@ -100,6 +111,7 @@ describe('Routes Users', () => {
 
             request
                 .delete('/Users/1')
+                .set('Authorization', `bearer ${token}`)
                 .end((err, res) => {
 
                     expect(res.statusCode).to.be.eql(204);

@@ -44,6 +44,7 @@ describe('Routes Books', () => {
         it('should return a list of books', done => {
             request
                 .get('/books')
+                .set('Authorization', `bearer ${token}`)
                 .end((err, res) => {
 
                     expect(res.body[0].id).to.be.eql(defaultBook.id);
@@ -59,6 +60,7 @@ describe('Routes Books', () => {
         it('should return a book', done => {
             request
                 .get('/books/1')
+                .set('Authorization', `bearer ${token}`)
                 .end((err, res) => {
 
                     expect(res.body.id).to.be.eql(defaultBook.id);
@@ -81,6 +83,7 @@ describe('Routes Books', () => {
 
             request
                 .post('/books')
+                .set('Authorization', `bearer ${token}`)
                 .send(newBook)
                 .end((err, res) => {
 
@@ -103,6 +106,7 @@ describe('Routes Books', () => {
 
             request
                 .put('/books/1')
+                .set('Authorization', `bearer ${token}`)
                 .send(updatedBook)
                 .end((err, res) => {
 
@@ -118,6 +122,7 @@ describe('Routes Books', () => {
 
             request
                 .delete('/books/1')
+                .set('Authorization', `bearer ${token}`)
                 .end((err, res) => {
 
                     expect(res.statusCode).to.be.eql(204);

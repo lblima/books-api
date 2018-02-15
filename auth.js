@@ -27,6 +27,6 @@ export default app => {
 
     return {
         initialize: () => Passport.initialize(),
-        authenticate: () => Passport.authenticate('jwt', app.config.jwtSecret)
+        authenticate: () => Passport.authenticate('jwt', app.config.jwtSession)
     }
 }

@@ -26,7 +26,7 @@ export default app => {
                             token: jwt.encode(payload, config.jwtSecret)
                         });
                     } else {
-                        res.sendStatus(HttpStatus.UNAUTHORIZED);
+                        res.sendStatus(HttpStatus.BAD_GATEWAY);
                     }
 
                 })

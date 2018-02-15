@@ -9,7 +9,7 @@ import authRouter from './routes/auth';
 
 const app = Express();
 
-//Global confi section
+//Global config section
 app.config = config;
 app.datasource = datasource(app);
 

@@ -2,15 +2,15 @@ import Sequelize from 'sequelize';
 import fs from 'fs';
 import path from 'path';
 
-let database = null;
+let database;
 
 const loadModels = (sequelize) => {
     const dir = path.join(__dirname, '../models');
     let models = [];
 
     fs.readdirSync(dir).forEach(file => {
-        const modelDir = path.join(dir, file);
-        const model = sequelize.import(modelDir);
+        const modelPath = path.join(dir, file);
+        const model = sequelize.import(modelPath);
         
         models[model.name] = model;
     });
@@ -31,12 +31,11 @@ export default (app) => {
         database = {
             sequelize,
             Sequelize,
-            models: {}
+            models: loadModels(sequelize)
         }
 
-        database.models = loadModels(sequelize);
-
-        sequelize.sync().done(() => database);
+        // sequelize.sync().done(() => database);
+        sequelize.sync().done();
     }
     
     return database;

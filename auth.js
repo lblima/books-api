@@ -12,10 +12,7 @@ export default app => {
         Users.findById(payload.id)
             .then(user => {
                 if (user) {
-                    return done(null, {
-                        id: user.id,
-                        email: user.email
-                    });
+                    return done(null, true);
                 }
 
                 return done(null, false);

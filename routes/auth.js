@@ -30,7 +30,7 @@ export default app => {
                     }
 
                 })
-                .catch(error => res.json(error.message));
+                .catch(error => res.sendStatus(HttpStatus.UNAUTHORIZED));
         } else {
             res.sendStatus(HttpStatus.UNAUTHORIZED)
         }

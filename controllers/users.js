@@ -5,7 +5,7 @@ const defaultResponse = (data, statusCode = HttpStatus.OK) => ({
     statusCode
 });
 
-const errorResponse = (message, statusCode = HttpStatus.BAD_REQUEST) => defaultResponse({
+const errorResponse = (message, statusCode = HttpStatus.INTERNAL_SERVER_ERROR) => defaultResponse({
     error: message
 }, statusCode);
 
